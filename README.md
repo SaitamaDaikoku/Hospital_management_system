@@ -16,7 +16,7 @@ A full-stack Hospital Management System built with Flask and MySQL to streamline
 
 ---
 
-##Tech Stack
+## Tech Stack
 Backend: Flask (Python)
 Database: MySQL
 Frontend: HTML, CSS, Jinja2 Templates
