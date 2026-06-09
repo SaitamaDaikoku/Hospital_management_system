@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard — Hospital DBMS{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon teal">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <div><div class="stat-value">{{ total_patients }}</div><div class="stat-label">Total Patients</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon amber">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        </div>
+        <div><div class="stat-value">{{ today_appointments }}</div><div class="stat-label">Today's Appointments</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <div><div class="stat-value">{{ total_doctors }}</div><div class="stat-label">Active Doctors</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon red">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div><div class="stat-value">₹{{ "%.0f"|format(monthly_revenue) }}</div><div class="stat-label">Monthly Revenue</div></div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <h3>Upcoming Appointments</h3>
+        <a href="{{ url_for('add_appointment') }}" class="btn btn-primary btn-sm">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Schedule New
+        </a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+            <tbody>
+                {% for a in upcoming %}
+                <tr>
+                    <td><strong>{{ a.first_name }} {{ a.last_name }}</strong></td>
+                    <td>{{ a.doctor_name }}</td>
+                    <td>{{ a.appointment_date }}</td>
+                    <td>{{ a.appointment_time }}</td>
+                    <td><span class="badge badge-{{ a.status }}">{{ a.status }}</span></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" style="text-align:center; color:#6b7280; padding:30px">No upcoming appointments</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

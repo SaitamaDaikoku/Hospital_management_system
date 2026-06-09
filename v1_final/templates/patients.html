@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Patients — Hospital DBMS{% endblock %}
+{% block page_title %}Patient Records{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <form class="search-bar" method="GET" style="margin:0">
+        <input type="text" name="search" value="{{ search }}" placeholder="Search by name or phone…">
+        <button type="submit" class="btn btn-outline btn-sm">Search</button>
+        {% if search %}<a href="{{ url_for('patients') }}" class="btn btn-outline btn-sm">Clear</a>{% endif %}
+    </form>
+    <a href="{{ url_for('add_patient') }}" class="btn btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Add Patient
+    </a>
+</div>
+<div class="card">
+    <div class="card-header"><h3>All Patients <span style="font-weight:400; color:#6b7280; font-size:0.85rem;">({{ patients|length }} records)</span></h3></div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>ID</th><th>Name</th><th>DOB</th><th>Gender</th><th>Phone</th><th>Blood</th><th>Registered</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for p in patients %}
+                <tr>
+                    <td style="color:#6b7280">#{{ p.id }}</td>
+                    <td><strong>{{ p.first_name }} {{ p.last_name }}</strong>{% if p.email %}<br><small style="color:#6b7280">{{ p.email }}</small>{% endif %}</td>
+                    <td>{{ p.dob or '—' }}</td>
+                    <td>{{ p.gender or '—' }}</td>
+                    <td>{{ p.phone or '—' }}</td>
+                    <td>{% if p.blood_group %}<span class="badge" style="background:#fde8e8; color:#9b1c1c;">{{ p.blood_group }}</span>{% else %}—{% endif %}</td>
+                    <td style="color:#6b7280; font-size:0.8rem;">{{ p.created_at.strftime('%d %b %Y') if p.created_at else '' }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{{ url_for('view_patient', pid=p.id) }}" class="btn btn-outline btn-sm">View</a>
+                            <a href="{{ url_for('edit_patient', pid=p.id) }}" class="btn btn-outline btn-sm">Edit</a>
+                            <form method="POST" action="{{ url_for('delete_patient', pid=p.id) }}" onsubmit="return confirm('Delete {{ p.first_name }} {{ p.last_name }}?')">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="8" style="text-align:center; color:#6b7280; padding:40px">No patients found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

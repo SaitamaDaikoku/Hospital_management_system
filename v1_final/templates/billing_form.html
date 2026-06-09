@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Create Bill — Hospital DBMS{% endblock %}
+{% block page_title %}Create Bill{% endblock %}
+{% block content %}
+<div style="max-width:700px;">
+<div class="card">
+    <div class="card-header"><h3>New Bill</h3><a href="{{ url_for('billing') }}" class="btn btn-outline btn-sm">← Back</a></div>
+    <div class="card-body">
+        <form method="POST" id="billForm">
+            <div class="form-grid">
+                <div class="form-group"><label>Patient *</label>
+                    <select name="patient_id" required><option value="">Select patient</option>
+                        {% for p in patients %}<option value="{{ p.id }}">{{ p.first_name }} {{ p.last_name }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="form-group"><label>Linked Appointment (optional)</label>
+                    <select name="appointment_id"><option value="">None</option>
+                        {% for a in appointments %}<option value="{{ a.id }}">{{ a.first_name }} {{ a.last_name }} — {{ a.appointment_date }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="form-group full"><label>Description *</label><textarea name="description" required placeholder="e.g. Consultation fee, Lab tests, Medication…"></textarea></div>
+                <div class="form-group"><label>Amount (₹) *</label><input type="number" name="amount" id="amount" step="0.01" min="0" required placeholder="0.00" aria-label="Amount" oninput="calcTotal()"></div>
+                <div class="form-group"><label>Discount (₹)</label><input type="number" name="discount" id="discount" step="0.01" min="0" value="0" placeholder="0.00" aria-label="Discount" oninput="calcTotal()"></div>
+                <div class="form-group"><label>Tax (₹)</label><input type="number" name="tax" id="tax" step="0.01" min="0" value="0" placeholder="0.00" aria-label="Tax" oninput="calcTotal()"></div>
+                <div class="form-group" style="background:#f7f3ee; border-radius:8px; padding:14px; border:1.5px solid #e5e0d8;">
+                    <label>Total Amount</label>
+                    <p id="totalDisplay" style="font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:#0d1b2a;">₹0.00</p>
+                </div>
+                <div class="form-group"><label>Payment Method</label>
+                    <select name="payment_method">
+                        <option value="cash">Cash</option><option value="card">Card</option>
+                        <option value="insurance">Insurance</option><option value="online">Online</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Status</label>
+                    <select name="status"><option value="pending">Pending</option><option value="paid">Paid</option></select>
+                </div>
+                <div class="form-group"><label>Billing Date</label><input type="date" name="billing_date" id="billDate" aria-label="Billing Date"></div>
+            </div>
+            <div style="display:flex; gap:12px; margin-top:16px;">
+                <button type="submit" class="btn btn-primary">Create Bill</button>
+                <a href="{{ url_for('billing') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<script>
+document.getElementById('billDate').value = new Date().toISOString().split('T')[0];
+function calcTotal() {
+    const a = parseFloat(document.getElementById('amount').value) || 0;
+    const d = parseFloat(document.getElementById('discount').value) || 0;
+    const t = parseFloat(document.getElementById('tax').value) || 0;
+    document.getElementById('totalDisplay').textContent = '₹' + (a - d + t).toFixed(2);
+}
+</script>
+{% endblock %}

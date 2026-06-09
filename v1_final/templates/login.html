@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital DBMS — Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --navy: #0d1b2a; --teal: #1a8f8f; --teal-light: #22b8b8; --cream: #f7f3ee; --border: #e5e0d8; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--navy); min-height: 100vh; display: flex; }
+
+        .login-visual {
+            flex: 1; background: linear-gradient(135deg, #0d1b2a 0%, #0e2a35 50%, #082020 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 60px; position: relative; overflow: hidden;
+        }
+        .login-visual::before {
+            content: ''; position: absolute; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(26,143,143,0.15) 0%, transparent 70%);
+            top: -100px; left: -100px;
+        }
+        .login-visual::after {
+            content: ''; position: absolute; width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(26,143,143,0.1) 0%, transparent 70%);
+            bottom: -50px; right: -50px;
+        }
+        .hospital-brand { position: relative; z-index: 1; text-align: center; }
+        .cross-icon {
+            width: 80px; height: 80px; margin: 0 auto 28px;
+            background: rgba(26,143,143,0.2); border: 2px solid rgba(26,143,143,0.4);
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+        }
+        .hospital-brand h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: white; line-height: 1.1; }
+        .hospital-brand h1 span { color: var(--teal-light); }
+        .hospital-brand p { color: rgba(255,255,255,0.4); margin-top: 12px; font-size: 0.95rem; letter-spacing: 1px; text-transform: uppercase; }
+        .features { margin-top: 60px; display: flex; flex-direction: column; gap: 16px; }
+        .feature { display: flex; align-items: center; gap: 14px; color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+        .feature-dot { width: 8px; height: 8px; background: var(--teal-light); border-radius: 50%; flex-shrink: 0; }
+
+        .login-panel {
+            width: 440px; background: var(--cream); display: flex; flex-direction: column;
+            justify-content: center; padding: 64px 48px;
+        }
+        .login-header { margin-bottom: 36px; }
+        .login-header h2 { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: var(--navy); }
+        .login-header p { color: #6b7280; margin-top: 6px; font-size: 0.88rem; }
+
+        .role-tabs { display: flex; gap: 0; margin-bottom: 28px; background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 4px; }
+        .role-tab { flex: 1; text-align: center; padding: 10px; border-radius: 7px; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: #6b7280; transition: all 0.2s; border: none; background: none; font-family: 'DM Sans', sans-serif; }
+        .role-tab.active { background: var(--navy); color: white; }
+
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--navy); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 9px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; background: white; }
+        input:focus { border-color: var(--teal); }
+
+        .login-btn { width: 100%; padding: 14px; background: var(--teal); color: white; border: none; border-radius: 9px; font-family: 'Playfair Display', serif; font-size: 1.05rem; cursor: pointer; transition: background 0.2s; margin-top: 6px; }
+        .login-btn:hover { background: #157878; }
+
+        .hint-box { margin-top: 28px; padding: 14px 16px; background: white; border: 1px solid var(--border); border-radius: 8px; font-size: 0.78rem; color: #6b7280; }
+        .hint-box strong { color: var(--navy); display: block; margin-bottom: 4px; }
+
+        .flash { padding: 12px 16px; border-radius: 8px; margin-bottom: 18px; font-size: 0.84rem; }
+        .flash.error { background: #fee2e2; color: #991b1b; border-left: 3px solid #ef4444; }
+        .flash.success { background: #d1fae5; color: #065f46; border-left: 3px solid #10b981; }
+    </style>
+</head>
+<body>
+<div class="login-visual">
+    <div class="hospital-brand">
+        <div class="cross-icon">
+            <svg width="40" height="40" fill="none" stroke="#22b8b8" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/>
+            </svg>
+        </div>
+        <h1>Medi<span>Core</span><br>Hospital</h1>
+        <p>Database Management System</p>
+    </div>
+    <div class="features">
+        <div class="feature"><div class="feature-dot"></div> Complete Patient Records &amp; History</div>
+        <div class="feature"><div class="feature-dot"></div> Doctor Scheduling &amp; Appointments</div>
+        <div class="feature"><div class="feature-dot"></div> Integrated Billing System</div>
+        <div class="feature"><div class="feature-dot"></div> Role-Based Access Control</div>
+    </div>
+</div>
+<div class="login-panel">
+    <div class="login-header">
+        <h2>Sign In</h2>
+        <p>Access your hospital management portal</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+            <div class="flash {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="role-tabs">
+        <button type="button" class="role-tab active" onclick="setRole('receptionist', this)">Receptionist</button>
+        <button type="button" class="role-tab" onclick="setRole('doctor', this)">Doctor</button>
+    </div>
+
+    <form method="POST">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" id="usernameInput" placeholder="e.g. receptionist1" required>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="login-btn">Sign In →</button>
+    </form>
+
+
+</div>
+<script>
+function setRole(role, el) {
+    document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('usernameInput').placeholder = role === 'receptionist' ? 'e.g. receptionist1' : 'e.g. dr.smith';
+}
+</script>
+</body>
+</html>

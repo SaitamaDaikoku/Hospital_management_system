@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Schedule — Hospital DBMS{% endblock %}
+{% block page_title %}Doctor Schedule{% endblock %}
+{% block content %}
+<a href="{{ url_for('doctors') }}" class="btn btn-outline btn-sm" style="margin-bottom:20px;">← Back to Doctors</a>
+<div class="card" style="margin-bottom:20px;">
+    <div class="card-header"><h3>{{ doctor.full_name }}</h3></div>
+    <div class="card-body">
+        <div style="display:flex; gap:40px; flex-wrap:wrap;">
+            <div><small style="color:#6b7280; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.8px;">Specialization</small><p><span class="badge" style="background:#e0f2fe; color:#0369a1;">{{ doctor.specialization }}</span></p></div>
+            <div><small style="color:#6b7280; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.8px;">Phone</small><p>{{ doctor.phone or '—' }}</p></div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header"><h3>Upcoming Schedule</h3><a href="{{ url_for('add_appointment') }}" class="btn btn-primary btn-sm">+ Book Appointment</a></div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Patient</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th></tr></thead>
+            <tbody>
+                {% for s in schedule %}
+                <tr><td><strong>{{ s.first_name }} {{ s.last_name }}</strong></td><td>{{ s.appointment_date }}</td><td>{{ s.appointment_time }}</td><td>{{ s.reason or '—' }}</td><td><span class="badge badge-{{ s.status }}">{{ s.status }}</span></td></tr>
+                {% else %}
+                <tr><td colspan="5" style="text-align:center; color:#6b7280; padding:30px">No upcoming appointments.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

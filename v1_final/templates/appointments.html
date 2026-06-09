@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Appointments — Hospital DBMS{% endblock %}
+{% block page_title %}Appointments{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+    <a href="{{ url_for('add_appointment') }}" class="btn btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Schedule Appointment
+    </a>
+</div>
+<div class="card">
+    <div class="card-header"><h3>All Appointments</h3></div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Patient</th><th>Doctor</th><th>Specialization</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for a in appointments %}
+                <tr>
+                    <td><strong>{{ a.first_name }} {{ a.last_name }}</strong></td>
+                    <td>{{ a.doctor_name }}</td>
+                    <td><span style="color:#6b7280; font-size:0.82rem;">{{ a.specialization }}</span></td>
+                    <td>{{ a.appointment_date }}</td>
+                    <td>{{ a.appointment_time }}</td>
+                    <td>{{ (a.reason[:30] + '…') if a.reason and a.reason|length > 30 else (a.reason or '—') }}</td>
+                    <td><span class="badge badge-{{ a.status }}">{{ a.status }}</span></td>
+                    <td>
+                        <div class="actions">
+                            <form method="POST" action="{{ url_for('update_appointment_status', aid=a.id) }}" style="display:inline">
+                                <select name="status" aria-label="Update appointment status" onchange="this.form.submit()" style="padding:4px 8px; font-size:0.78rem; border-radius:6px; border:1.5px solid #e5e0d8;">
+                                    {% for s in ['scheduled','completed','cancelled','no-show'] %}
+                                    <option value="{{ s }}" {% if a.status == s %}selected{% endif %}>{{ s }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                            <form method="POST" action="{{ url_for('delete_appointment', aid=a.id) }}" onsubmit="return confirm('Delete this appointment?')">
+                                <button type="submit" class="btn btn-danger btn-sm" aria-label="Delete appointment">×</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="8" style="text-align:center; color:#6b7280; padding:40px">No appointments found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
